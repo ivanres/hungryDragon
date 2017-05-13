@@ -11,8 +11,10 @@ var StateMain={
     
     create:function()
     {
+    	game.physics.startSystem(Phaser.Physics.ARCADE);
 
     	this.top = 0;
+    	this.bottom = game.height-85-70+8;
 
     	//dragon
     	this.dragon=game.add.sprite(0,0,"dragon");
@@ -30,6 +32,9 @@ var StateMain={
 
     	this.dragon.bringToTop();
     	this.dragon.y = this.top;
+    	game.physics.enable(this.dragon, Phaser.Physics.ARCADE);
+
+    	this.dragon.body.gravity.y=500;
 
     	this.background.autoScroll(-100, 0);
 
@@ -54,7 +59,12 @@ var StateMain={
     
     update:function()
     {       
-        
+        if (this.dragon.y > this.bottom){
+        	this.dragon.y = this.bottom;
+        	this.dragon.body.gravity.y = 0;
+        }else {
+        	this.dragon.body.gravity.y = 500;
+        }
     }    
     
 }
