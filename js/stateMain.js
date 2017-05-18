@@ -6,7 +6,9 @@ var StateMain={
          game.scale.forceOrientation(true, false);	
        }
        game.load.spritesheet("dragon", "images/main/dragon.png", 120, 85, 4);
+     
        game.load.image("background", "images/main/background.png");
+       game.load.spritesheet("candy", "images/main/candy.png", 52, 50, 8);
     },
     
     create:function()
@@ -32,11 +34,18 @@ var StateMain={
 
     	this.dragon.bringToTop();
     	this.dragon.y = this.top;
-    	game.physics.enable(this.dragon, Phaser.Physics.ARCADE);
-
-    	this.dragon.body.gravity.y=500;
+    	
 
     	this.background.autoScroll(-100, 0);
+
+    	//candies
+    	this.candies=game.add.group();
+    	this.candies.createMultiple(40, 'candy');
+    	this.candies.setAll('checkWorldBounds', true);
+    	this.candies.setAll('outOfBoundsKill', true);
+
+    	game.physics.enable([this.dragon, this.candies], Phaser.Physics.ARCADE);
+    	this.dragon.body.gravity.y=500;
 
         this.setListeners();
     },
@@ -46,7 +55,19 @@ var StateMain={
     		game.scale.enterIncorrectOrientation.add(this.wrongWay, this);
     		game.scale.leaveIncorrectOrientation.add(this.rightWay, this);
     	}
+    	game.time.events.loop(Phaser.Timer.SECOND, this.fireCandy, this); //Use `add` for one off timer
     	
+    },
+    fireCandy: function() {
+    	var candy = this.candies.getFirstDead(); //First piece of candy that is not on screen/not active
+    	var y = game.rnd.integerInRange(0, game.height-60);
+    	var x = game.width-100;
+    	var type=game.rnd.integerInRange(0,7);
+
+    	candy.frame = type;
+    	candy.reset(x, y);
+    	candy.enabled = true;//No longer elegible for getFirstDead
+    	candy.body.velocity.x=-200;
     },
     wrongWay: function() {
     	console.log("wrongWay");
