@@ -14,6 +14,9 @@ var StateMain={
     
     create:function()
     {
+
+        this.score = 0;
+
     	game.physics.startSystem(Phaser.Physics.ARCADE);
 
     	this.top = 0;
@@ -55,7 +58,21 @@ var StateMain={
         this.balloonGroup.scale.y=.5;
         this.balloonGroup.x=50;
 
-    	game.physics.enable([this.dragon, this.candies], Phaser.Physics.ARCADE);
+        //text
+        this.scoreText=game.add.text(game.world.centerX, 60 , this.score);
+        this.scoreText.fill="#000000";
+        this.scoreText.fontSize=64;
+        this.scoreText.anchor.set(0.5, 0.5);
+
+        this.scoreLabel=game.add.text(game.world.centerX, 20 , "SCORE");
+        this.scoreLabel.fill="#000000";
+        this.scoreLabel.fontSize=32;
+        this.scoreLabel.anchor.set(0.5, 0.5);
+
+
+        // game.physics.enable([this.dragon, this.candies], Phaser.Physics.ARCADE);
+        game.physics.arcade.enable(this.dragon);
+    	game.physics.arcade.enable(this.candies);
     	this.dragon.body.gravity.y=500;
     	this.dragon.body.immovable = true;
 
@@ -94,7 +111,15 @@ var StateMain={
     	this.dragon.body.velocity.y=-200;
     },
     onEat: function (dragon, candy) {
-    	candy.kill(); //Removes candy from the stage
+        if (this.think.frame == candy.frame){
+            candy.kill(); //Removes candy from the stage    
+            this.resetThink();
+            this.score++;
+            this.scoreText.text = this.score;
+        } else{
+            candy.kill();
+        }
+    	
     },
     resetThink: function(){
         var n = game.rnd.integerInRange(0, 7);
@@ -102,7 +127,7 @@ var StateMain={
     },
     update:function()
     {       
-    	game.physics.arcade.collide(this.dragon, this.candies, null, this.onEat);
+    	game.physics.arcade.collide(this.dragon, this.candies, null, this.onEat, this);
 
         this.balloonGroup.y = this.dragon.y-60;
 
