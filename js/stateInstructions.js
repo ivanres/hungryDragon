@@ -1,9 +1,11 @@
-var StateTitle={    
+var StateInstructions={    
     
    preload:function()
     {
        game.load.spritesheet("buttons", "images/ui/buttons.png", 265, 75);
        game.load.spritesheet("dragon", "images/main/dragon.png", 120, 85, 4);
+       game.load.spritesheet("candy", "images/main/candy.png", 52, 50, 8);
+       game.load.image("balloon", "images/main/thought.png");       
     },
     
     create:function()
@@ -19,18 +21,24 @@ var StateTitle={
 
     	game.stage.backgroundColor="#26C9FF";
 
-    	this.titleText = game.add.text(game.world.centerX, 60, "Hungry Dragon", {
-    		font: "50px Lobster",
-    		fill: "#00D900",
-    		stroke: "#222222",
-    		strokeThickness: 4,
-    		align: "center"
-    	});
-    	this.titleText.anchor.set(.5, .5);
+    	this.inText = game.add.text(game.world.centerX, 30, "Eat only what the dragon is thinking");
+        this.inText.fill="#000000";
+    	this.inText.anchor.set(.5, .5);
+
+        //thought
+        this.balloonGroup = game.add.group();
+        this.balloon=game.add.sprite(0,0,"balloon");
+        this.think=game.add.sprite(36,26, "candy");
+        this.balloonGroup.add(this.balloon);
+        this.balloonGroup.add(this.think);
+        this.balloonGroup.scale.x=.5;
+        this.balloonGroup.scale.y=.5;
+        this.balloonGroup.x=this.dragon.x-20;
+        this.balloonGroup.y=this.dragon.y-100;
     },
 
     startGame: function() {
-		game.state.start("StateInstructions");
+		game.state.start("StateMain");
     },
     
     update:function()
