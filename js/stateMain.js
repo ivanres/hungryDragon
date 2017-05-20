@@ -25,6 +25,8 @@ var StateMain={
 
     	game.physics.startSystem(Phaser.Physics.ARCADE);
 
+    	game.stage.backgroundColor="#000000";
+
     	this.top = 0;
     	this.bottom = game.height-85-70+8;
 
@@ -47,6 +49,7 @@ var StateMain={
     	if (screen.height>764){
     		this.background.y = game.world.centerY - this.background.height/2;
     		this.top = this.background.y;
+    		this.bottom = this.background.y + this.background.height - 140;
     	}
 
     	this.dragon.bringToTop();
@@ -72,12 +75,12 @@ var StateMain={
         this.balloonGroup.x=50;
 
         //text
-        this.scoreText=game.add.text(game.world.centerX, 60 , this.score);
+        this.scoreText=game.add.text(game.world.centerX, this.top + 60 , this.score);
         this.scoreText.fill="#000000";
         this.scoreText.fontSize=64;
         this.scoreText.anchor.set(0.5, 0.5);
 
-        this.scoreLabel=game.add.text(game.world.centerX, 20 , "SCORE");
+        this.scoreLabel=game.add.text(game.world.centerX, this.top + 20 , "SCORE");
         this.scoreLabel.fill="#000000";
         this.scoreLabel.fontSize=32;
         this.scoreLabel.anchor.set(0.5, 0.5);
@@ -144,7 +147,7 @@ var StateMain={
     },
     fireCandy: function() {
     	var candy = this.candies.getFirstDead(); //First piece of candy that is not on screen/not active
-    	var y = game.rnd.integerInRange(0, game.height-60);
+    	var y = game.rnd.integerInRange(this.top, this.bottom);
     	var x = game.width-100;
     	var type=game.rnd.integerInRange(0,7);
 
