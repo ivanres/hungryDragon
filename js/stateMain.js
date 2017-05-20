@@ -10,6 +10,7 @@ var StateMain={
        game.load.image("background", "images/main/background.png");
        game.load.spritesheet("candy", "images/main/candy.png", 52, 50, 8);
        game.load.image("balloon", "images/main/thought.png");
+       game.load.spritesheet("soundButtons", "images/ui/soundButtons.png", 44, 44, 4);
     },
     
     create:function()
@@ -76,8 +77,15 @@ var StateMain={
     	this.dragon.body.gravity.y=500;
     	this.dragon.body.immovable = true;
 
+    	//sound buttons
+    	this.btnMusic=game.add.sprite(20,20,"soundButtons");
+    	this.btnSound=game.add.sprite(70,20,"soundButtons");
+    	this.btnMusic.frame=2;
+
         this.setListeners();
-        this.resetThink()
+        this.resetThink();
+
+        this.updateButtons();
     },
 
     setListeners: function() {
@@ -86,6 +94,26 @@ var StateMain={
     		game.scale.leaveIncorrectOrientation.add(this.rightWay, this);
     	}
     	game.time.events.loop(Phaser.Timer.SECOND, this.fireCandy, this); //Use `add` for one off timer
+
+    	this.btnSound.inputEnabled = true;
+    	this.btnSound.events.onInputDown.add(this.toggleSound, this);
+
+    	this.btnMusic.inputEnabled = true;
+    	this.btnMusic.events.onInputDown.add(this.toggleMusic, this);
+
+    	
+    },
+    toggleSound: function() {
+    	soundOn = !soundOn;
+    	this.updateButtons();
+    },
+    toggleMusic: function() {
+    	musicOn = !musicOn;
+    	this.updateButtons();
+    },
+    updateButtons: function() {
+    	this.btnSound.frame = soundOn? 0 : 1;
+    	this.btnMusic.frame = musicOn? 2 : 3;
     	
     },
     fireCandy: function() {
