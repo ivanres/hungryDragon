@@ -22,6 +22,9 @@ var StateMain={
 
         this.score = 0;
         this.backgroundMusicPlaying = false;
+        this.lift = 200;
+        this.fall = 500;
+        this.delay = 3;
 
     	game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -89,7 +92,7 @@ var StateMain={
         // game.physics.enable([this.dragon, this.candies], Phaser.Physics.ARCADE);
         game.physics.arcade.enable(this.dragon);
     	game.physics.arcade.enable(this.candies);
-    	this.dragon.body.gravity.y=500;
+    	this.dragon.body.gravity.y = this.fall;
     	this.dragon.body.immovable = true;
 
     	//sound buttons
@@ -109,7 +112,7 @@ var StateMain={
     		game.scale.enterIncorrectOrientation.add(this.wrongWay, this);
     		game.scale.leaveIncorrectOrientation.add(this.rightWay, this);
     	}
-    	game.time.events.loop(Phaser.Timer.SECOND, this.fireCandy, this); //Use `add` for one off timer
+    	game.time.events.loop(Phaser.Timer.SECOND*this.delay, this.fireCandy, this); //Use `add` for one off timer
 
     	this.btnSound.inputEnabled = true;
     	this.btnSound.events.onInputDown.add(this.toggleSound, this);
@@ -165,7 +168,7 @@ var StateMain={
     	document.getElementById('wrongWay').style.display='none';
     },
     flap:function() {
-    	this.dragon.body.velocity.y=-200;
+    	this.dragon.body.velocity.y=-this.lift;
     },
     onEat: function (dragon, candy) {
         if (this.think.frame == candy.frame){
