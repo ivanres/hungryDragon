@@ -14,13 +14,14 @@ var StateMain={
 
        game.load.audio("burp", "sounds/burp.mp3");
        game.load.audio("gulp", "sounds/gulp.mp3");
-       //game.load.audio("gulp", "sounds/gulp.mp3");
+       game.load.audio("backgroundMusic", "sounds/background.mp3");
     },
     
     create:function()
     {
 
         this.score = 0;
+        this.backgroundMusicPlaying = false;
 
     	game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -30,6 +31,9 @@ var StateMain={
     	//sounds
     	this.burp = game.add.audio("burp");
     	this.gulp = game.add.audio("gulp");
+    	this.backgroundMusic = game.add.audio("backgroundMusic");
+    	this.backgroundMusic.volume = .5;
+    	this.backgroundMusic.loop = true;
 
     	//dragon
     	this.dragon=game.add.sprite(0,0,"dragon");
@@ -94,6 +98,7 @@ var StateMain={
         this.resetThink();
 
         this.updateButtons();
+        this.updateMusic();
     },
 
     setListeners: function() {
@@ -118,6 +123,19 @@ var StateMain={
     toggleMusic: function() {
     	musicOn = !musicOn;
     	this.updateButtons();
+    	this.updateMusic();
+    },
+    updateMusic: function() {
+    	if (musicOn){
+    		if (!this.backgroundMusicPlaying){
+    			this.backgroundMusicPlaying = true;
+    			this.backgroundMusic.play();
+    		}
+    	}
+    	else {
+    		this.backgroundMusicPlaying = false;
+    		this.backgroundMusic.stop();
+    	}
     },
     updateButtons: function() {
     	this.btnSound.frame = soundOn? 0 : 1;
@@ -156,11 +174,13 @@ var StateMain={
             	this.gulp.play();
             }
         } else{
-            candy.kill();
-            game.state.start("StateOver");
-            if (soundOn){
+        	this.backgroundMusic.stop();
+        	if (soundOn){
             	this.burp.play();
             }
+            candy.kill();
+            game.state.start("StateOver");
+            
         }
     	
     },
