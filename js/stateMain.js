@@ -11,6 +11,10 @@ var StateMain={
        game.load.spritesheet("candy", "images/main/candy.png", 52, 50, 8);
        game.load.image("balloon", "images/main/thought.png");
        game.load.spritesheet("soundButtons", "images/ui/soundButtons.png", 44, 44, 4);
+
+       game.load.audio("burp", "sounds/burp.mp3");
+       game.load.audio("gulp", "sounds/gulp.mp3");
+       //game.load.audio("gulp", "sounds/gulp.mp3");
     },
     
     create:function()
@@ -22,6 +26,10 @@ var StateMain={
 
     	this.top = 0;
     	this.bottom = game.height-85-70+8;
+
+    	//sounds
+    	this.burp = game.add.audio("burp");
+    	this.gulp = game.add.audio("gulp");
 
     	//dragon
     	this.dragon=game.add.sprite(0,0,"dragon");
@@ -144,9 +152,15 @@ var StateMain={
             this.resetThink();
             this.score++;
             this.scoreText.text = this.score;
+            if (soundOn){
+            	this.gulp.play();
+            }
         } else{
             candy.kill();
             game.state.start("StateOver");
+            if (soundOn){
+            	this.burp.play();
+            }
         }
     	
     },
