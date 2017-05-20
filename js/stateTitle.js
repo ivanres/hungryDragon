@@ -18,6 +18,15 @@ var StateTitle={
     	this.dragon.anchor.set(0.5, 0.5);
 
     	game.stage.backgroundColor="#26C9FF";
+
+    	this.titleText = game.add.text(game.world.centerX, 60, "Hungry Dragon", {
+    		font: "50px Lobster",
+    		fill: "#00D900",
+    		stroke: "#222222",
+    		strokeThickness: 4,
+    		align: "center"
+    	});
+    	this.titleText.anchor.set(.5, .5);
     },
 
     startGame: function() {
